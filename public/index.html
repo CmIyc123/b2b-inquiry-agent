@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="B2B Inquiry Agent 外贸询盘与报价工作台" />
+    <title>B2B Inquiry Agent · 外贸询盘工作台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">
+          <span>D</span><span>A</span>
+        </div>
+        <div>
+          <h1>B2B Inquiry Agent</h1>
+          <p>外贸询盘与报价工作台</p>
+        </div>
+      </div>
+
+      <ol class="pipeline" aria-label="询报价流程">
+        <li><span>01</span>接收询盘</li>
+        <li><span>02</span>整理线索</li>
+        <li><span>03</span>人工审核</li>
+        <li><span>04</span>发送报价</li>
+      </ol>
+
+      <div class="health" aria-live="polite">
+        <span id="health-dot" class="health-dot"></span>
+        <div>
+          <small>系统状态</small>
+          <span id="health-text">正在检查服务</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="access-strip" aria-labelledby="access-title">
+        <div class="strip-copy">
+          <h2 id="access-title">管理员访问</h2>
+          <p>凭证仅保存在当前标签页，关闭后自动清除。</p>
+        </div>
+        <form id="key-form" class="inline-form credential-form">
+          <label class="sr-only" for="admin-key">管理员 API Key</label>
+          <input
+            id="admin-key"
+            type="password"
+            autocomplete="off"
+            placeholder="ADMIN_API_KEY"
+            required
+          />
+          <button type="submit">保存凭证</button>
+        </form>
+        <p id="key-status" class="status-text" aria-live="polite"></p>
+      </section>
+
+      <section class="channel-strip" aria-labelledby="channel-title">
+        <div class="channel-identity">
+          <span class="channel-mark" aria-hidden="true">WA</span>
+          <div>
+            <h2 id="channel-title">WhatsApp Business</h2>
+            <p>客户消息进入现有 Agent 工作流，共用 Lead、审核与报价数据。</p>
+          </div>
+        </div>
+        <div class="channel-connection">
+          <span id="whatsapp-state" class="channel-state">尚未检查</span>
+          <p id="whatsapp-details">保存管理员凭证后检查 Meta 配置。</p>
+        </div>
+        <button id="whatsapp-connect" class="channel-action" type="button">
+          配置 WhatsApp
+        </button>
+        <form id="whatsapp-simulator" class="simulator-form" hidden>
+          <label>
+            模拟客户号码
+            <input
+              id="whatsapp-from"
+              value="33600000000"
+              autocomplete="off"
+              required
+            />
+          </label>
+          <label>
+            模拟客户消息
+            <input
+              id="whatsapp-message"
+              placeholder="Please quote 500 g of Product A"
+              required
+            />
+          </label>
+          <button type="submit">发送模拟消息</button>
+        </form>
+        <p id="whatsapp-result" class="channel-result" aria-live="polite"></p>
+      </section>
+
+      <section class="module chat-panel">
+        <div class="module-heading">
+          <div>
+            <span class="module-kicker">Agent desk</span>
+            <h2>询盘对话</h2>
+            <p>发送一条真实询盘，观察 Agent 如何查询产品并写入业务数据。</p>
+          </div>
+          <button id="new-chat" class="secondary" type="button">
+            开始新会话
+          </button>
+        </div>
+        <div id="chat-log" class="chat-log" aria-live="polite">
+          <p class="empty-state">
+            尚无消息。可以从一封英文产品询盘开始。
+          </p>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <label class="sr-only" for="chat-message">客户消息</label>
+          <textarea
+            id="chat-message"
+            rows="3"
+            placeholder="Hi, I'm Alice from..."
+            required
+          ></textarea>
+          <button type="submit">发送消息</button>
+        </form>
+        <p id="conversation-label" class="technical"></p>
+      </section>
+
+      <section class="module lead-panel">
+        <div class="module-heading compact">
+          <div>
+            <span class="module-kicker">Lead index</span>
+            <h2>查找客户线索</h2>
+          </div>
+        </div>
+        <form id="lead-form" class="stack-form">
+          <label>
+            客户邮箱
+            <input
+              id="lead-email"
+              type="email"
+              placeholder="alice@example.com"
+              required
+            />
+          </label>
+          <label>
+            产品筛选（可选）
+            <input id="lead-product" type="text" placeholder="Product A" />
+          </label>
+          <button type="submit">查询线索</button>
+        </form>
+        <div id="lead-results" class="results" aria-live="polite"></div>
+      </section>
+
+      <section class="module quote-panel">
+        <div class="module-heading compact">
+          <div>
+            <span class="module-kicker">Quote ledger</span>
+            <h2>报价查询</h2>
+          </div>
+        </div>
+        <form id="quote-form" class="inline-form">
+          <label class="sr-only" for="quote-number">报价编号</label>
+          <input
+            id="quote-number"
+            placeholder="Q-20260920-XXXXXXXX"
+            required
+          />
+          <button type="submit">查询</button>
+        </form>
+        <div id="quote-result" class="results" aria-live="polite"></div>
+        <form id="quote-sent-form" class="inline-form sent-form" hidden>
+          <label>
+            有效天数
+            <input id="valid-days" type="number" min="1" value="14" required />
+          </label>
+          <button type="submit">确认已发送</button>
+        </form>
+      </section>
+
+      <section class="module knowledge-panel">
+        <div class="module-heading">
+          <div>
+            <span class="module-kicker">Product knowledge</span>
+            <h2>产品资料入库</h2>
+            <p>上传产品手册或技术资料。系统自动解析、去重、分段并写入 SQLite 全文检索索引。</p>
+          </div>
+          <button id="refresh-documents" class="secondary" type="button">
+            刷新资料清单
+          </button>
+        </div>
+
+        <div class="knowledge-layout">
+          <form id="document-form" class="document-form">
+            <label>
+              产品 SKU
+              <input id="document-product-sku" value="PA-99" required />
+            </label>
+            <label>
+              资料类型
+              <select id="document-type">
+                <option value="brochure">产品手册</option>
+                <option value="tds">TDS 技术数据表</option>
+                <option value="sds">SDS 安全数据表</option>
+                <option value="coa_template">COA 模板</option>
+                <option value="manual">使用说明</option>
+                <option value="other">其他资料</option>
+              </select>
+            </label>
+            <label class="document-title-field">
+              资料标题
+              <input
+                id="document-title"
+                placeholder="Product A Technical Data Sheet"
+                required
+              />
+            </label>
+            <label class="document-file-field">
+              选择文件
+              <input
+                id="document-file"
+                type="file"
+                accept=".pdf,.docx,.txt,.md,.html,.htm,.csv,.json"
+                required
+              />
+              <small>PDF、DOCX、TXT、Markdown、HTML、CSV、JSON，最大 8 MB</small>
+            </label>
+            <button type="submit">导入并建立索引</button>
+            <p id="document-status" class="status-text" aria-live="polite"></p>
+          </form>
+
+          <div class="knowledge-register">
+            <div class="register-heading">
+              <h3>已入库资料</h3>
+              <span id="document-count">0 项</span>
+            </div>
+            <div id="document-list" class="document-list" aria-live="polite">
+              <p class="empty-state">保存管理员凭证后加载资料。</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="knowledge-search-form" class="knowledge-search-form">
+          <label>
+            检查 RAG 检索结果
+            <input
+              id="knowledge-search-query"
+              placeholder="例如：storage conditions"
+              required
+            />
+          </label>
+          <button type="submit">检索资料</button>
+        </form>
+        <div id="knowledge-search-results" class="knowledge-search-results" aria-live="polite"></div>
+      </section>
+
+      <section class="module review-panel">
+        <div class="module-heading">
+          <div>
+            <span class="module-kicker">Human checkpoint</span>
+            <h2>待审核报价</h2>
+            <p>商业价格和交期必须经过人工确认，Agent 不会自行生成。</p>
+          </div>
+          <button id="refresh-reviews" class="secondary" type="button">
+            刷新队列
+          </button>
+        </div>
+        <div class="review-layout">
+          <div id="review-list" class="review-list" aria-live="polite">
+            <p class="empty-state">保存管理员凭证后加载待审核任务。</p>
+          </div>
+          <form id="review-form" class="stack-form review-form" hidden>
+            <p id="selected-review" class="technical"></p>
+            <div id="selected-lead" class="selected-lead"></div>
+            <label>
+              审核结果
+              <select id="review-decision">
+                <option value="approved">批准</option>
+                <option value="rejected">拒绝</option>
+              </select>
+            </label>
+            <label>
+              审核人
+              <input id="reviewed-by" required placeholder="sales-admin" />
+            </label>
+            <div id="commercial-fields" class="commercial-fields">
+              <label>
+                库存已确认
+                <select id="inventory-confirmed">
+                  <option value="true">是</option>
+                  <option value="false">否</option>
+                </select>
+              </label>
+              <label>
+                单价
+                <input id="unit-price" type="number" min="0" step="any" />
+              </label>
+              <label>
+                币种
+                <input id="currency" value="USD" />
+              </label>
+              <label>
+                交期（天）
+                <input id="lead-time-days" type="number" min="1" step="1" />
+              </label>
+              <label>
+                COA 状态
+                <select id="coa-status">
+                  <option value="available">可提供</option>
+                  <option value="unavailable">不可提供</option>
+                  <option value="not_requested">客户未要求</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              审核备注
+              <textarea id="review-notes" rows="3"></textarea>
+            </label>
+            <button type="submit">保存审核结果</button>
+            <p id="review-status" class="status-text" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>B2B Inquiry Agent</strong>
+      <span>Agent orchestration · human approval · SQLite audit trail</span>
+    </footer>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

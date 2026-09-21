@@ -1,0 +1,27 @@
+{
+  "name": "b2b-inquiry-agent",
+  "version": "1.0.0",
+  "description": "Production-minded B2B inquiry and quotation agent with human review, SQLite, RAG, and WhatsApp adapters",
+  "main": "index.js",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "tsx --test \"src/tests/*.test.ts\"",
+    "verify": "npm run check && npm test",
+    "api": "tsx src/api/start-server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.83.0",
+    "mammoth": "^1.12.3",
+    "pdf-parse": "^2.4.5",
+    "typebox": "1.3.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+data/*.db-shm
+data/*.db-wal
+data/*.db
+data/*.json
+data/*.jsonl
+data/*.backup*
+data/*-before-*.json
+!data/.gitkeep
+
+*.log
